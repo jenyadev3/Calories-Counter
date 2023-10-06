@@ -54,3 +54,35 @@ document.addEventListener('DOMContentLoaded', () => {
   } 
 });
 
+const minBtn = document.getElementById('activity-minimal'); 
+const lowBtn = document.getElementById('activity-low');
+const mediumBtn = document.getElementById('activity-medium');
+const highBtn = document.getElementById('activity-high');
+
+function handleSubmitButtonClick (event) {
+  event.preventDefault();
+  container.classList.remove('counter__result--hidden');
+  let n = 0;
+  let keepWeightCoef = 0;
+  const normResult = document.getElementById('calories-norm');
+
+  if (maleBtn.checked) {
+    n = ((10 * weightInput.value) + (6.25 * heightInput.value) - (5 * ageInput.value) + 5);
+
+    if (minBtn.checked) {
+      keepWeightCoef = n * 1.2;
+    } else if (lowBtn.checked) {
+      keepWeightCoef = n * 1.375;
+    } else if (mediumBtn.checked) {
+      keepWeightCoef = n * 1.55;
+    } else if (highBtn.checked) {
+      keepWeightCoef = n * 1.725;
+    } else  {
+      keepWeightCoef = n * 1.9;
+    }
+  }
+  normResult.textContent = String(Math.floor(keepWeightCoef));
+}
+
+submitBtn.addEventListener('click', handleSubmitButtonClick);
+
