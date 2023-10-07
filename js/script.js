@@ -4,6 +4,7 @@ const heightInput = document.getElementById('height');
 const submitBtn = document.querySelector('.form__submit-button');
 const resetBtn = document.querySelector('.form__reset-button');
 const maleBtn = document.getElementById('gender-male');
+const femaleBtn = document.getElementById('gender-female');
 const container = document.querySelector('.counter__result');
 
 // Управление атрибутами кнопок в зависимости от заполненных полей
@@ -49,9 +50,11 @@ resetBtn.addEventListener('click', handleResetButtonClick);
 document.addEventListener('DOMContentLoaded', () => {
   const reloaded = sessionStorage.getItem('reloaded');
   
-  if (reloaded) {
-    handleResetButtonClick();
-  } 
+  if (!reloaded) { 
+    sessionStorage.setItem('reloaded', 'true');  
+  } else {
+    handleResetButtonClick();  
+  }
 });
 
 const minBtn = document.getElementById('activity-minimal'); 
@@ -65,23 +68,30 @@ function handleSubmitButtonClick (event) {
   let n = 0;
   let keepWeightCoef = 0;
   const normResult = document.getElementById('calories-norm');
+  const gainResult = document.getElementById('calories-maximal');
+  const loseResult = document.getElementById('calories-minimal');
 
   if (maleBtn.checked) {
     n = ((10 * weightInput.value) + (6.25 * heightInput.value) - (5 * ageInput.value) + 5);
-
-    if (minBtn.checked) {
-      keepWeightCoef = n * 1.2;
-    } else if (lowBtn.checked) {
-      keepWeightCoef = n * 1.375;
-    } else if (mediumBtn.checked) {
-      keepWeightCoef = n * 1.55;
-    } else if (highBtn.checked) {
-      keepWeightCoef = n * 1.725;
-    } else  {
-      keepWeightCoef = n * 1.9;
-    }
+  } else if (femaleBtn.checked) {
+    n = ((10 * weightInput.value) + (6.25 * heightInput.value) - (5 * ageInput.value) - 161);
   }
+
+  if (minBtn.checked) {
+    keepWeightCoef = n * 1.2;
+  } else if (lowBtn.checked) {
+    keepWeightCoef = n * 1.375;
+  } else if (mediumBtn.checked) {
+    keepWeightCoef = n * 1.55;
+  } else if (highBtn.checked) {
+    keepWeightCoef = n * 1.725;
+  } else  {
+    keepWeightCoef = n * 1.9;
+  }
+
   normResult.textContent = String(Math.floor(keepWeightCoef));
+  gainResult.textContent = String(Math.floor(keepWeightCoef * 1.15));
+  loseResult.textContent = String(Math.floor(keepWeightCoef * 0.85));
 }
 
 submitBtn.addEventListener('click', handleSubmitButtonClick);
